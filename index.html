@@ -508,6 +508,7 @@ body.is-sliding *,body.is-sliding *::before,body.is-sliding *::after{animation-p
 .lc-trait{font-size:.84rem;margin:6px 0 0;line-height:1.55}
 .lc-focus{font-size:.76rem;font-weight:900;color:var(--teal-dark);margin-top:6px}
 .ss-focus{font-weight:900;color:var(--teal-dark);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:1px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw}
+.ach-fun{margin:0;font-size:.9rem;font-weight:900;color:var(--teal-dark);line-height:1.5}
 .ach-trait{margin:0;font-size:.86rem;color:var(--ink-soft)}
 .ach-trait strong{color:var(--ink)}
 .ach-locked{margin:0;font-size:.8rem;color:var(--ink-soft)}
@@ -803,8 +804,8 @@ body.tut-active .nyabit-bubble{max-width:min(430px,calc(100vw - 28px))}
 </div>
 <div class="zk-overlay" id="achOverlay" role="dialog" aria-modal="true" aria-label="実績">
 <div class="zk-panel">
-<div class="zk-head"><div><h2>🏅 実績</h2><p>合格前は表面の個性だけが見えます。初回合格すると、その品目の詳しいプロフィール（ヒント・効くパラメーター）が開きます。</p></div><button type="button" class="zk-close" id="achCloseBtn">✕ 閉じる</button></div>
-<p class="zk-progress" id="achProgress">獲得 0 / 7</p>
+<div class="zk-head"><div><h2>🏅 実績</h2><p>品目の初回合格で、その品目の詳しいプロフィール（ヒント・効くパラメーター）が開きます。トラブル図鑑を埋めていくと、「トラブルメーカー」の称号も育っていきます。</p></div><button type="button" class="zk-close" id="achCloseBtn">✕ 閉じる</button></div>
+<p class="zk-progress" id="achProgress">獲得 0 / 9</p>
 <div class="zk-grid" id="achGrid"></div>
 </div>
 </div>
@@ -813,7 +814,7 @@ body.tut-active .nyabit-bubble{max-width:min(430px,calc(100vw - 28px))}
 <div class="zk-head"><div><h2>☰ メニュー</h2></div><button type="button" class="zk-close" id="menuCloseBtn">✕ 閉じる</button></div>
 <div class="menu-list">
 <button type="button" class="menu-item" id="menuZukanBtn"><span class="mi-ico" aria-hidden="true">📖</span><span class="mi-main"><span class="mi-title">トラブル図鑑</span><span class="mi-sub">遭遇したトラブルだけが記録されます</span></span><span class="mi-new" id="zkNewMark">NEW</span><span class="mi-count" id="zkCount">解放 0 / 19</span></button>
-<button type="button" class="menu-item" id="menuAchBtn"><span class="mi-ico" aria-hidden="true">🏅</span><span class="mi-main"><span class="mi-title">実績</span><span class="mi-sub">品目ごとの初回合格でプロフィールが開きます</span></span><span class="mi-new" id="achNewMark">NEW</span><span class="mi-count" id="achCount">獲得 0 / 7</span></button>
+<button type="button" class="menu-item" id="menuAchBtn"><span class="mi-ico" aria-hidden="true">🏅</span><span class="mi-main"><span class="mi-title">実績</span><span class="mi-sub">合格でプロフィール、図鑑でトラブルメーカーの称号が増えます</span></span><span class="mi-new" id="achNewMark">NEW</span><span class="mi-count" id="achCount">獲得 0 / 9</span></button>
 <button type="button" class="menu-item danger" id="menuResetBtn"><span class="mi-ico" aria-hidden="true">🗑️</span><span class="mi-main"><span class="mi-title">記録をリセット</span><span class="mi-sub">図鑑・実績・品目クリア記録・チュートリアルの既読を消します（確認画面が出ます）</span></span></button>
 <label class="menu-item nyabit-toggle-item" for="nyabitToggleChk"><span class="mi-ico" aria-hidden="true">🐾</span><span class="mi-main"><span class="mi-title">ニャビット表示</span><span class="mi-sub">案内役の表示ON／OFF。左下のニャビットをクリックしても切り替えられます。OFFでも予兆・問題行・原因チェーンはそのまま表示されます（設定は次回も維持されます）</span></span><input type="checkbox" class="nyabit-toggle" id="nyabitToggleChk" checked aria-label="ニャビット表示のON／OFF"></label>
 </div>
@@ -1015,8 +1016,8 @@ function renderLineup(){
  var btns=g.querySelectorAll("[data-product]");
  for(var bi=0;bi<btns.length;bi++){ (function(b){ b.addEventListener("click",function(){ selectProduct(+b.getAttribute("data-product")); }); })(btns[bi]); }
  var lp=$("lineupProgress");
- if(lp){ var zk="?"; try{ zk=zkCount(); }catch(e){} var ac="?"; try{ ac=achCountGot(); }catch(e){}
-  lp.textContent="進捗：クリア "+clearedCount()+" / 5品目 ・ 📖 図鑑 "+zk+" / 19 ・ 🏅 実績 "+ac+" / 7"; }
+ if(lp){ var zk="?"; try{ zk=zkCount(); }catch(e){} var ac="?"; try{ ac=achCountGot(); }catch(e){} var at=9; try{ at=achDefs().length; }catch(e){}
+  lp.textContent="進捗：クリア "+clearedCount()+" / 5品目 ・ 📖 図鑑 "+zk+" / 19 ・ 🏅 実績 "+ac+" / "+at; }
 }
 
 /* ---------- Inputs & evaluation ---------- */
@@ -2596,7 +2597,7 @@ if(!causes.length)causes.push(["—","上流から下流まで、パスポート
 var gained=passAll?Math.round(120+Math.max(0,480-full.used)*0.15):Math.round((av<=AV_SPEC?16:0)+(diss>=DISS_SPEC?20:0)+(wOk?10:0)+(hardOk?16:0));
 if(passAll){ recordReviewEntry(); }
 var newAch=[];
-if(passAll){ if(achAward("mission_"+state.mission))newAch.push(SCENARIOS[state.mission].short+" 初回合格"); var allDone=true; for(var ai2=0;ai2<5;ai2++)if(!achHas("mission_"+ai2))allDone=false; if(allDone&&achAward("all"))newAch.push("全品目合格"); state.cleared=clearedCount(); try{renderLineup();}catch(e){} }
+if(passAll){ if(achAward("mission_"+state.mission))newAch.push(ACH_MISSION_NAMES[state.mission]); var allDone=true; for(var ai2=0;ai2<5;ai2++)if(!achHas("mission_"+ai2))allDone=false; if(allDone&&achAward("all"))newAch.push("フルライン制覇"); state.cleared=clearedCount(); try{renderLineup();}catch(e){} }
 state.score=Math.max(0,state.score+gained); state.lotNo++;
 var td=tabDefects(), cd=coatDefects();
 var zoomLine=[td,cd].reduce(function(a,l){return a.concat(l)},[]).filter(function(d){return d.level==="bad"}).map(function(d){return d.label}).join("／");
@@ -2811,7 +2812,7 @@ function unlockTrouble(id){
  if(!def)return;
  zkUnlocked[id]=true; zkLastUnlockedName=def.name; zkSave(); zkSyncCount(); syncNewBadges();
  try{nyabitSay("あわわ、「"+def.name+"」が出たよ…図鑑に記録しておいた。","warn","panicked");}catch(e){}
- if(zkCount()===TROUBLES.length&&achAward("zukan"))achToast(["トラブル図鑑コンプリート"],5600);
+ try{ achTroubleCheck(true); }catch(e){}
  zkToastBatch.push(def.name);
  if(zkToastTimer)clearTimeout(zkToastTimer);
  zkToastTimer=setTimeout(function(){
@@ -2870,9 +2871,18 @@ function closeZukan(){ var ov=$("zkOverlay"); if(ov){ ov.classList.remove("open"
    product's first QC pass (badged in that product's colour), all five
    products passed, and the trouble zukan completed. Persists across
    runs in localStorage, like the zukan. */
+/* ===== v65: 実績を楽しく — playful names + 3-stage trouble-maker titles =====
+   9 achievements: 5 per-product first-pass titles with playful names,
+   フルライン制覇 (all five), and the trouble-zukan ladder 駆け出し (1) /
+   ベテラン (10) / 最強 (all 19), replacing the single 図鑑コンプリート.
+   Conditions and the pass/unlock models are unchanged. The legacy
+   achState.zukan flag is kept: anyone holding it counts as having all
+   three stages (see achTroubleCheck). */
+var ACH_MISSION_NAMES=["はじめの一錠","なんでも溶かし屋さん","あつさに負けない","湿っぽさを吹き飛ばせ","最終試験、卒業！"];
+var ACH_MISSION_DESCS=["最初の一歩。まずは基本の錠剤を合格させた。","溶けにくい相手でも、ちゃんと溶かしてみせた。","熱に弱い品目を、温度管理で乗り切った。","湿気に負けず、さらっと合格させた。","複合特性＋厳しい規格の最終試験を突破した。"];
 var ACH_KEY="tabletGame.achievements.v1";
-var achState={missions:{},all:false,zukan:false};
-try{ var achRaw=localStorage.getItem(ACH_KEY); if(achRaw){ var achParsed=JSON.parse(achRaw); if(achParsed&&typeof achParsed==="object"){ achState.missions=achParsed.missions||{}; achState.all=!!achParsed.all; achState.zukan=!!achParsed.zukan; } } }catch(e){}
+var achState={missions:{},all:false,zukan:false,trouble1:false,trouble10:false,trouble19:false};
+try{ var achRaw=localStorage.getItem(ACH_KEY); if(achRaw){ var achParsed=JSON.parse(achRaw); if(achParsed&&typeof achParsed==="object"){ achState.missions=achParsed.missions||{}; achState.all=!!achParsed.all; achState.zukan=!!achParsed.zukan; achState.trouble1=!!achParsed.trouble1; achState.trouble10=!!achParsed.trouble10; achState.trouble19=!!achParsed.trouble19; } } }catch(e){}
 function achSave(){ try{ localStorage.setItem(ACH_KEY,JSON.stringify(achState)); }catch(e){} }
 /* ===== v60: 未確認バッジ — seen/unseen tracking for zukan + achievements =====
    A newly unlocked zukan entry or newly awarded achievement is "unseen"
@@ -2910,14 +2920,33 @@ function syncNewBadges(){
 function zkMarkSeen(){ var ch=false; TROUBLES.forEach(function(t){ if(zkUnlocked[t.id]&&!seenState.zk[t.id]){ seenState.zk[t.id]=true; ch=true; } }); if(ch)seenSave(); syncNewBadges(); }
 function achMarkSeen(){ var ch=false; achDefs().forEach(function(d){ if(achHas(d.id)&&!seenState.ach[d.id]){ seenState.ach[d.id]=true; ch=true; } }); if(ch)seenSave(); syncNewBadges(); }
 seenInit();
-function achDefs(){ var list=SCENARIOS.map(function(sc,i){ return {id:"mission_"+i,name:sc.short+" 初回合格",trait:sc.trait,focus:sc.focus,profile:sc.profile,color:sc.color}; }); list.push({id:"all",name:"全品目合格",desc:"5品目すべてで最終QCに合格した記録。個性の違う5つの品目を、それぞれの勝負どころに合わせて作り分けた証し。",color:"#b8860b"}); list.push({id:"zukan",name:"トラブル図鑑コンプリート",desc:"トラブル図鑑の全19項目を解放した記録。",color:"#0d7a6d"}); return list; }
+/* v65 migration: grant the trouble-maker stages the existing zukan
+   count (or the legacy zukan-complete flag) already earns. Runs after
+   seenInit on purpose: freshly migrated titles stay "unseen", so the
+   existing NEW pill / menu dot points the player at them once. */
+try{ achTroubleCheck(false); }catch(e){}
+function achDefs(){ var list=SCENARIOS.map(function(sc,i){ return {id:"mission_"+i,name:ACH_MISSION_NAMES[i],desc:ACH_MISSION_DESCS[i],forProduct:sc.short,trait:sc.trait,focus:sc.focus,profile:sc.profile,color:sc.color}; }); list.push({id:"all",name:"フルライン制覇",desc:"5品目すべて最終QC合格。全ライン制覇。個性の違う5品目を、それぞれの勝負どころに合わせて作り分けた証し。",color:"#b8860b",icon:"🏆"}); list.push({id:"trouble1",name:"駆け出しトラブルメーカー",desc:"はじめてトラブルを引き起こした（褒めてない）。",color:"#c25e10",icon:"💥",cond:"図鑑 1件解放"}); list.push({id:"trouble10",name:"ベテラントラブルメーカー",desc:"たいていのトラブルは経験済みになってきた。",color:"#b03a2e",icon:"🔥",cond:"図鑑 10件解放"}); list.push({id:"trouble19",name:"最強のトラブルメーカー",desc:"起こせるトラブルは全部起こした。もう怖いものはない。",color:"#7a4fa3",icon:"👑",cond:"図鑑 全19件解放"}); return list; }
+/* Trouble-maker ladder: count-based, checked on every zukan unlock and
+   once at load (migration below), so existing players are granted the
+   stages their unlock count — or the legacy zukan-complete flag —
+   already earns. notify=true pops the usual achievement toast. */
+function achTroubleCheck(notify){
+ var n=0; try{ n=zkCount(); }catch(e){}
+ if(achState.zukan)n=TROUBLES.length;
+ var gained=[];
+ if(n>=1&&achAward("trouble1"))gained.push("駆け出しトラブルメーカー");
+ if(n>=10&&achAward("trouble10"))gained.push("ベテラントラブルメーカー");
+ if(n>=TROUBLES.length){ if(achAward("trouble19"))gained.push("最強のトラブルメーカー"); if(!achState.zukan){ achState.zukan=true; achSave(); } }
+ if(gained.length&&notify)achToast(gained,5600);
+ return gained;
+}
 function achHas(id){ if(id.indexOf("mission_")===0)return !!achState.missions[id.slice(8)]; return !!achState[id]; }
 function achAward(id){ if(achHas(id))return false; if(id.indexOf("mission_")===0)achState.missions[id.slice(8)]=true; else achState[id]=true; achSave(); achSyncCount(); syncNewBadges(); return true; }
 function achCountGot(){ return achDefs().filter(function(d){return achHas(d.id)}).length; }
 function achSyncCount(){ var label="獲得 "+achCountGot()+" / "+achDefs().length; var c=$("achCount"); if(c)c.textContent=label; var p=$("achProgress"); if(p)p.textContent=label; try{renderLineup();}catch(e){} }
 var achToastHide=null;
 function achToast(names,delayMs){ setTimeout(function(){ var t=$("achToast"); if(!t)return; t.innerHTML="<span>🏅 実績解除："+names.map(function(n){return "『"+n+"』"}).join(" ")+"</span>"; var b=document.createElement("button"); b.type="button"; b.textContent="実績を見る"; b.addEventListener("click",function(){ t.classList.remove("show"); openAch(); }); t.appendChild(b); t.classList.add("show"); if(achToastHide)clearTimeout(achToastHide); achToastHide=setTimeout(function(){ t.classList.remove("show"); },5200); },delayMs||0); }
-function achCardHtml(d){ var got=achHas(d.id); var mid=""; if(d.profile){ mid='<p class="ach-trait"><strong>個性：</strong>'+d.trait+'</p>'+(got?'<div class="ach-profile"><span class="ach-profile-label">合格で開いたプロフィール</span><p>'+d.profile+'</p><p class="ach-focus-line">ヒント：'+d.focus+'</p></div>':'<p class="ach-locked">🔒 詳しいプロフィール（勝負どころ・効くパラメーターの傾向）は、初回合格で開きます。</p>'); } else { mid='<p class="zk-mech">'+d.desc+'</p>'; } return '<article class="zk-card ach-card'+(got?" found":"")+'"><div class="ach-badge"'+(got?' style="background:'+d.color+';border-color:'+d.color+'"':"")+'">'+(got?"✓":"？")+'</div><div class="ach-body"><h3 class="zk-name">'+d.name+(got&&achIsNew(d.id)?'<span class="new-badge">NEW</span>':"")+'</h3>'+mid+'<span class="ach-state'+(got?" got":"")+'">'+(got?"獲得済み":"未獲得")+'</span></div></article>'; }
+function achCardHtml(d){ var got=achHas(d.id); var mid=""; if(d.profile){ mid='<p class="ach-fun">'+d.desc+'</p><p class="ach-trait"><strong>'+d.forProduct+'の個性：</strong>'+d.trait+'</p>'+(got?'<div class="ach-profile"><span class="ach-profile-label">合格で開いたプロフィール</span><p>'+d.profile+'</p><p class="ach-focus-line">ヒント：'+d.focus+'</p></div>':'<p class="ach-locked">🔒 詳しいプロフィール（勝負どころ・効くパラメーターの傾向）は、'+d.forProduct+'の初回合格で開きます。</p>'); } else { mid='<p class="ach-fun">'+d.desc+'</p>'+(d.cond?'<p class="ach-locked">条件：'+d.cond+'（図鑑はいま '+zkCount()+' / '+TROUBLES.length+' 件解放）</p>':""); } return '<article class="zk-card ach-card'+(got?" found":"")+'"><div class="ach-badge"'+(got?' style="background:'+d.color+';border-color:'+d.color+'"':"")+'">'+(got?(d.icon||"✓"):"？")+'</div><div class="ach-body"><h3 class="zk-name">'+d.name+(got&&achIsNew(d.id)?'<span class="new-badge">NEW</span>':"")+'</h3>'+mid+'<span class="ach-state'+(got?" got":"")+'">'+(got?"獲得済み":"未獲得")+'</span></div></article>'; }
 function renderAch(){ var g=$("achGrid"); if(!g)return; g.innerHTML=achDefs().map(achCardHtml).join(""); achSyncCount(); }
 function openAch(){ renderAch(); achMarkSeen(); var ov=$("achOverlay"); if(ov){ ov.classList.add("open"); document.body.style.overflow="hidden"; } }
 function closeAch(){ var ov=$("achOverlay"); if(ov){ ov.classList.remove("open"); document.body.style.overflow=""; } }
@@ -2973,7 +3002,7 @@ function doResetRecords(){
  try{ localStorage.removeItem(ACH_KEY); }catch(e){}
  try{ localStorage.removeItem(SEEN_KEY); }catch(e){}
  try{ localStorage.removeItem(TUTORIAL_KEY); }catch(e){}
- zkUnlocked={}; achState={missions:{},all:false,zukan:false}; state.cleared=0;
+ zkUnlocked={}; achState={missions:{},all:false,zukan:false,trouble1:false,trouble10:false,trouble19:false}; state.cleared=0;
  seenState={zk:{},ach:{}}; seenSave(); syncNewBadges();
  try{ zkSyncCount(); achSyncCount(); }catch(e){}
  try{ renderZukan(); }catch(e){}
@@ -3169,6 +3198,7 @@ function tutRestore(){
  currentMemo=s.memo; currentHints=s.hints; currentTags=s.tags;
  trials=s.trials; state.score=s.score;
  zkUnlocked=s.zk; achState=s.ach; try{ zkSave(); achSave(); }catch(e){}
+ try{ achTroubleCheck(false); }catch(e){}
  if(window._dryTimer){ clearInterval(window._dryTimer); window._dryTimer=null; }
  dryRun.active=false;
  fullInit();
