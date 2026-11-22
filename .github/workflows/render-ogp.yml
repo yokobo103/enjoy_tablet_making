@@ -1,8 +1,9 @@
-name: Render OGP image
+name: Render OGP image and apply metadata
 on:
   push:
     paths:
       - 'assets/ogp.svg'
+      - 'scripts/add-ogp-meta.py'
       - '.github/workflows/render-ogp.yml'
   workflow_dispatch:
 permissions:
@@ -18,12 +19,14 @@ jobs:
           sudo apt-get install -y librsvg2-bin fonts-noto-cjk
       - name: Render 1200x630 PNG
         run: rsvg-convert -w 1200 -h 630 assets/ogp.svg -o assets/ogp.png
-      - name: Commit generated image
+      - name: Apply OGP metadata to the game HTML
+        run: python3 scripts/add-ogp-meta.py
+      - name: Commit rendered image and metadata
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/ogp.png
+          git add assets/ogp.png index.html
           if ! git diff --cached --quiet; then
-            git commit -m "Generate OGP image from Nyabit key art"
+            git commit -m "Publish OGP image and metadata"
             git push
           fi
