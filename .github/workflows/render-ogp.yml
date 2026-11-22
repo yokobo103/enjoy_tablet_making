@@ -1,0 +1,32 @@
+name: Render OGP image and apply metadata
+on:
+  push:
+    paths:
+      - 'assets/ogp.svg'
+      - 'scripts/add-ogp-meta.py'
+      - '.github/workflows/render-ogp.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install SVG renderer and Japanese fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y librsvg2-bin fonts-noto-cjk
+      - name: Render 1200x630 PNG
+        run: rsvg-convert -w 1200 -h 630 assets/ogp.svg -o assets/ogp.png
+      - name: Apply OGP metadata to the game HTML
+        run: python3 scripts/add-ogp-meta.py
+      - name: Commit rendered image and metadata
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/ogp.png index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish OGP image and metadata"
+            git push
+          fi
