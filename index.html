@@ -730,7 +730,7 @@ body.tut-active .nyabit-bubble{max-width:min(430px,calc(100vw - 28px))}
 .zk-new-badge{position:absolute;top:8px;right:8px;z-index:2;background:var(--amber);color:#1a1200;border:1.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.28);font-size:.68rem;font-weight:900;letter-spacing:.08em;border-radius:999px;padding:2px 9px;line-height:1.4;pointer-events:none}
 .zk-card.is-new{background:var(--amber-soft);background:color-mix(in srgb,var(--amber-soft) 42%,var(--panel));border-color:var(--amber)}
 </style>
-<style>.hero-img{display:block;width:100%;max-width:1080px;height:auto;margin:16px auto 6px;border-radius:14px;box-shadow:0 4px 18px rgba(20,30,60,.20)}</style><style>.mission-progress{display:none}</style></head>
+<style>.hero-img{display:block;width:100%;max-width:1080px;height:auto;margin:16px auto 6px;border-radius:14px;box-shadow:0 4px 18px rgba(20,30,60,.20)}</style><style>.mission-progress{display:none}</style><style>#missionDesc,#missionTrait,#missionChip,#traitTags,#lineupProgress{display:none}</style></head>
 <body>
 <div class="wrap">
 <header class="intro">
@@ -742,9 +742,9 @@ body.tut-active .nyabit-bubble{max-width:min(430px,calc(100vw - 28px))}
 </header>
 
 <section class="scoreboard" aria-label="スコアボード">
-<div class="score-cell"><div class="label"><span class="sb-dot" id="sbDot"></span>ミッション</div><div class="value"><span id="sbMission">1</span><small> / 5</small></div></div>
+<div class="score-cell" style="display:none"><div class="label"><span class="sb-dot" id="sbDot"></span>ミッション</div><div class="value"><span id="sbMission">1</span><small> / 5</small></div></div>
 <div class="score-cell"><div class="label">試行回数</div><div class="value"><span id="sbTrials">0</span><small> 回</small></div></div>
-<div class="score-cell"><div class="label">クリアした品目</div><div class="value"><span id="sbQc">0</span><small> / 5</small></div></div>
+<div class="score-cell" style="display:none"><div class="label">クリアした品目</div><div class="value"><span id="sbQc">0</span><small> / 5</small></div></div>
 <div class="score-cell"><div class="label">スコア</div><div class="value"><span id="sbScore">0</span><small> pt</small></div></div>
 </section>
 
@@ -757,20 +757,18 @@ body.tut-active .nyabit-bubble{max-width:min(430px,calc(100vw - 28px))}
 <section class="panel mission" id="missionPanel" aria-label="現在のミッション">
 <div class="mission-top"><div><div class="mission-kicker" id="missionKicker">MISSION 1 / 5</div><h2 id="missionTitle">—</h2><p class="mission-desc" id="missionDesc">—</p><div class="mission-chip" id="missionChip"></div><div class="mission-trait" id="missionTrait"></div></div><div class="mission-progress" id="missionProgress" aria-hidden="true"></div></div>
 <div class="traits" id="traitTags"></div>
-<div class="memo"><h3>📋 品目情報（ヒントと数値目安）</h3><div id="productInfoBox"></div></div>
+
 <p class="sub" style="margin-top:10px">⚠ 初期値のままでは不合格。まず品目情報に合わせて直す</p>
 </section>
 
 <section class="panel" id="fullPanel" style="margin-top:16px" aria-label="全工程モード">
 <h2>🏭 粉が工場を流れる</h2>
-<p class="sub"></p>
-<div style="display:flex;justify-content:space-between;font-size:.85rem;font-weight:700"><span>⏰ 共通の時計（全工程共有）</span><span class="mono"><span id="clockUsed">0</span> / 480 分　残り <span id="clockLeft">480</span>分</span></div>
-<div class="clock-bar"><div class="clock-fill" id="clockFill" style="width:0%"></div></div>
+<div style="display:none"><span id="clockUsed">0</span><span id="clockLeft">480</span><div id="clockFill"></div></div>
 <div class="sticky-summary" id="stickySummary" aria-label="常時表示ステータス（いまの工程・ヒント・残り時間）"><span class="ss-stage" id="ssStage">現在：①予備混合</span><span class="ss-focus" id="ssFocus"></span><span class="ss-meta mono" id="ssMeta">⏰ 残り 480分</span></div>
 <div class="factory-map" id="factoryMap"></div>
 <h3 style="margin:14px 0 0;font-size:.95rem">🪪 粉のパスポート（製造中の記録 — 中間品の物性）</h3>
 <div class="particles" id="particleBox" aria-label="粒子の見た目"></div>
-<p class="passport-summary" id="particleCaption">粒が大きい＝粒径大、濃い青＝濡れている、ひび割れ柄＝もろい、緑の輪＝皮膜あり。</p>
+<p class="passport-summary" id="particleCaption"></p>
 <div class="passport-alerts" id="passportAlerts" aria-label="注意域のパスポート項目"></div>
 <details class="fold passport-fold" id="passportDetails"><summary>🔢 数値を見る — パスポート全項目</summary><div class="passport" id="passportGrid"></div></details>
 <div id="fullStages"></div>
@@ -832,9 +830,9 @@ body.tut-active .nyabit-bubble{max-width:min(430px,calc(100vw - 28px))}
 <div class="zk-head"><div><h2>☰ メニュー</h2></div><button type="button" class="zk-close" id="menuCloseBtn">✕ 閉じる</button></div>
 <div class="menu-list">
 <button type="button" class="menu-item" id="menuZukanBtn"><span class="mi-ico" aria-hidden="true">📖</span><span class="mi-main"><span class="mi-title">トラブル図鑑</span><span class="mi-sub">遭遇したトラブルだけが記録されます</span></span><span class="mi-new" id="zkNewMark">NEW</span><span class="mi-count" id="zkCount">解放 0 / 19</span></button>
-<button type="button" class="menu-item" id="menuAchBtn"><span class="mi-ico" aria-hidden="true">🏅</span><span class="mi-main"><span class="mi-title">実績</span><span class="mi-sub">合格でプロフィール、図鑑でトラブルメーカーの称号が増えます</span></span><span class="mi-new" id="achNewMark">NEW</span><span class="mi-count" id="achCount">獲得 0 / 9</span></button>
-<button type="button" class="menu-item danger" id="menuResetBtn"><span class="mi-ico" aria-hidden="true">🗑️</span><span class="mi-main"><span class="mi-title">記録をリセット</span><span class="mi-sub">図鑑・実績・品目クリア記録・チュートリアルの既読を消します（確認画面が出ます）</span></span></button>
-<label class="menu-item nyabit-toggle-item" for="nyabitToggleChk"><span class="mi-ico" aria-hidden="true">🐾</span><span class="mi-main"><span class="mi-title">ニャビット表示</span><span class="mi-sub">案内役の表示ON／OFF。左下のニャビットをクリックしても切り替えられます。OFFでも予兆・問題行・原因チェーンはそのまま表示されます（設定は次回も維持されます）</span></span><input type="checkbox" class="nyabit-toggle" id="nyabitToggleChk" checked aria-label="ニャビット表示のON／OFF"></label>
+<button type="button" class="menu-item" id="menuAchBtn"><span class="mi-ico" aria-hidden="true">🏅</span><span class="mi-main"><span class="mi-title">実績</span><span class="mi-sub">合格と図鑑で称号が増えます</span></span><span class="mi-new" id="achNewMark">NEW</span><span class="mi-count" id="achCount">獲得 0 / 9</span></button>
+<button type="button" class="menu-item danger" id="menuResetBtn"><span class="mi-ico" aria-hidden="true">🗑️</span><span class="mi-main"><span class="mi-title">記録をリセット</span><span class="mi-sub">記録を全部消します（確認画面が出ます）</span></span></button>
+<label class="menu-item nyabit-toggle-item" for="nyabitToggleChk"><span class="mi-ico" aria-hidden="true">🐾</span><span class="mi-main"><span class="mi-title">ニャビット表示</span><span class="mi-sub">案内役の表示ON／OFF</span></span><input type="checkbox" class="nyabit-toggle" id="nyabitToggleChk" checked aria-label="ニャビット表示のON／OFF"></label>
 </div>
 </div>
 </div>
@@ -2941,7 +2939,7 @@ seenInit();
    seenInit on purpose: freshly migrated titles stay "unseen", so the
    existing NEW pill / menu dot points the player at them once. */
 try{ achTroubleCheck(false); }catch(e){}
-function achDefs(){ var list=SCENARIOS.map(function(sc,i){ return {id:"mission_"+i,name:ACH_MISSION_NAMES[i],desc:ACH_MISSION_DESCS[i],forProduct:sc.short,trait:sc.trait,focus:sc.focus,profile:sc.profile,color:sc.color}; }); list.push({id:"all",name:"フルライン制覇",desc:"5品目すべて最終QC合格。全ライン制覇。個性の違う5品目を、それぞれの勝負どころに合わせて作り分けた証し。",color:"#b8860b",icon:"🏆"}); list.push({id:"trouble1",name:"駆け出しトラブルメーカー",desc:"はじめてトラブルを引き起こした（褒めてない）。",color:"#c25e10",icon:"💥",cond:"図鑑 1件解放"}); list.push({id:"trouble10",name:"ベテラントラブルメーカー",desc:"たいていのトラブルは経験済みになってきた。",color:"#b03a2e",icon:"🔥",cond:"図鑑 10件解放"}); list.push({id:"trouble19",name:"最強のトラブルメーカー",desc:"起こせるトラブルは全部起こした。もう怖いものはない。",color:"#7a4fa3",icon:"👑",cond:"図鑑 全19件解放"}); return list; }
+function achDefs(){ var list=SCENARIOS.map(function(sc,i){ return {id:"mission_"+i,name:ACH_MISSION_NAMES[i],desc:ACH_MISSION_DESCS[i],forProduct:sc.short,trait:sc.trait,focus:sc.focus,profile:sc.profile,color:sc.color}; }); list.push({id:"all",name:"フルライン制覇",desc:"5品目すべて最終QC合格。全ライン制覇。",color:"#b8860b",icon:"🏆"}); list.push({id:"trouble1",name:"駆け出しトラブルメーカー",desc:"はじめてトラブルを引き起こした（褒めてない）。",color:"#c25e10",icon:"💥",cond:"図鑑 1件解放"}); list.push({id:"trouble10",name:"ベテラントラブルメーカー",desc:"たいていのトラブルは経験済みになってきた。",color:"#b03a2e",icon:"🔥",cond:"図鑑 10件解放"}); list.push({id:"trouble19",name:"最強のトラブルメーカー",desc:"起こせるトラブルは全部起こした。もう怖いものはない。",color:"#7a4fa3",icon:"👑",cond:"図鑑 全19件解放"}); return list; }
 /* Trouble-maker ladder: count-based, checked on every zukan unlock and
    once at load (migration below), so existing players are granted the
    stages their unlock count — or the legacy zukan-complete flag —
